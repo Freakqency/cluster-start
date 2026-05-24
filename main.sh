@@ -3,9 +3,9 @@
 set -euo pipefail
 
 check_prerequisites(){
-	prereq=("jq" "wget" "tar" "find" "curl" "bash" "mktemp ")
+	prereq=("jq" "wget" "tar" "find" "curl" "bash" "mktemp")
 	for cmd in "${prereq[@]}"; do
-		if ! command -v $cmd &> /dev/null; then
+		if ! command -v "$cmd" &> /dev/null; then
 			echo "prereq not found: $cmd"
 			echo "Aborting"
 			exit 1
@@ -55,7 +55,7 @@ install_archive_tools() {
 	binary_tmp_location="$(mktemp -d)"
 	trap 'rm -rf "$binary_tmp_location"' EXIT
 	# Fetch and untar external all binaries to a tmp location
-	for url in $(jq -r ".tools.urls[]" "$repo_dir/manifest.json"); do
+	for url in $(jq -r ".tools[].url" "$repo_dir/manifest.json"); do
 		wget -qO- "$url" | tar -xz -C "$binary_tmp_location"
 	done
 	# Move all executables from tmp to BINARY_HOME
@@ -66,7 +66,7 @@ install_archive_tools() {
 
 install_special_cases() {
 	# Handle special bins by directly executing the mentioned command
-	jq -r '.special_cases.command[]' "$repo_dir/manifest.json" | while IFS= read -r cmd; do
+	jq -r '.special_cases[].command' "$repo_dir/manifest.json" | while IFS= read -r cmd; do
 		eval "$cmd"
 	done
 }
@@ -91,13 +91,13 @@ validate() {
 validate_all() {
 	export PATH="$HOME/.local/bin:$PATH"
 	# validate the binarys are present
-	validate "$(jq -r ".tools.name[]" "$repo_dir/manifest.json")"
+	validate "$(jq -r ".tools[].name" "$repo_dir/manifest.json")"
 	# validate special tools where installed
-	validate "$(jq -r '.special_cases.name[]' "$repo_dir/manifest.json")"
+	validate "$(jq -r '.special_cases[].name' "$repo_dir/manifest.json")"
 	# validate local scripts where installed properly
 	validate "$(find "$repo_dir/scripts" -mindepth 1 -maxdepth 1 -type f -executable -printf "%f\n")"
 	echo "Setup completed successfully! 🎉🎉🎉"
-	echo 'Run source $HOME/.bashrc'
+	echo "Run source $HOME/.bashrc"
 }
 
 main() {
@@ -112,4 +112,3 @@ main() {
 }
 
 main "$@"
-
