@@ -1,0 +1,73 @@
+" Map leader to space key
+let mapleader=" "
+
+" Basic settings
+set nocompatible              " Disable vi compatibility
+set encoding=utf-8            " Use UTF-8
+set relativenumber            " Set relative line number
+set ruler                     " Show cursor position
+set showcmd                   " Show partial commands
+set incsearch                 " Incremental search
+set hlsearch                  " Highlight search matches
+set ignorecase                " Case-insensitive search
+set smartcase                 " Case-sensitive if uppercase used
+set autoindent                " Auto-indent new lines
+set expandtab                 " Use spaces instead of tabs
+set tabstop=2                 " 2 spaces for tabs
+set shiftwidth=2              " 2 spaces for indentation
+set softtabstop=2             " 2 spaces for backspace
+set wrap                      " Wrap long lines
+set linebreak                 " Break at word boundaries
+set backspace=indent,eol,start " Backspace over everything
+set splitright                " Always split to right
+set splitbelow                " Always split below 
+set clipboard+=unnamed        " Ues system clipboard
+set mouse=a                   " Allow mouse mode
+set colorcolumn=80            " Set line limit
+set autoread                  " Read any changes made to file
+set termguicolors             " Better colors if terminal supports it
+
+" Filetype detection and syntax highlighting
+filetype off
+filetype plugin on
+filetype indent on
+syntax enable
+
+" File-specific settings
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=0 expandtab
+autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType hcl setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType sh setlocal tabstop=2 shiftwidth=2 softtabstop=2
+" Detect Ansible YAML files
+autocmd BufRead,BufNewFile */playbooks/*.yml setlocal filetype=yaml.ansible
+autocmd BufRead,BufNewFile */roles/*.yml setlocal filetype=yaml.ansible
+autocmd BufRead,BufNewFile */tasks/*.yml setlocal filetype=yaml.ansible
+
+" Basic mappings for efficiency
+ nnoremap <C-l> :nohlsearch<CR> " Clear search highlights
+ nnoremap <Tab> :bnext<CR>      " Next buffer
+ nnoremap <S-Tab> :bprevious<CR> " Previous buffer
+ nnoremap <leader>w :w<CR>      " Quick save
+ nnoremap <leader>q :q<CR>      " Quick quit
+
+" Minimal statusline
+set statusline=%F%m%r%h%w\ [%Y]\ %=%l,%c%V\ %P
+set laststatus=2              " Always show statusline
+
+" Enable basic code folding for Python and HCL
+set foldmethod=indent
+
+" Disable swap files for HPC environments
+set noswapfile
+set nobackup
+set nowritebackup
+set viminfofile=~/.local/state/vim/viminfo
+
+" Enable persistent undo
+set undodir=~/.config/vim/undodir//
+silent call system('mkdir -p ' . &undodir)
+set undofile
+
+" netrw state
+let g:netrw_home = expand('~/.local/state/vim')
+silent call mkdir(g:netrw_home, 'p')

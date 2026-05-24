@@ -1,0 +1,33 @@
+[user]
+	name = <username>
+	email = <email>
+[url "ssh://git@github.com/"]
+[alias]
+	st = status
+	lg = log --oneline -3
+	ac = "!git add -u && git commit"
+	br = branch -a
+	co = checkout
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[core]
+	editor = vim
+	autocrlf = input
+[sequence]
+	editor = vim
+[help]
+	autocorrect = 20
+[cola]
+	spellcheck = true
+[status]
+	branch = true
+[pull]
+	rebase = true
+[fetch]
+	autoStash = true
+[rebase]
+	autoStash = true
+[fetch]
+	prune = true

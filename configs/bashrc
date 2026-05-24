@@ -1,0 +1,36 @@
+# shellcheck shell=bash
+# HPC config bootstrap
+export PATH="$HOME/.local/bin:$PATH"
+export DOCKER_BUILDKIT=1
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_STATE_HOME="$HOME/.local/state"
+export MYVIMRC="$HOME/.config/vim/vimrc"
+export VIMINIT="source $MYVIMRC"
+
+# shell options
+shopt -s expand_aliases
+shopt -s cdable_vars
+shopt -s cdspell
+
+# General
+taillatest() {
+	local filename
+	filename="$(find . -type f -printf "%T@ %p\n" | sort -nr | head -n 1 | cut -d" " -f2-)"
+
+	echo "Tailing $filename"
+	tail -f "$filename"
+}
+
+vimlatest() {
+	local filename
+	filename="$(find . -type f -printf "%T@ %p\n" | sort -nr | head -n 1 | cut -d" " -f2-)"
+
+	echo "Opening $filename"
+	vim "$filename"
+}
+
+alias cdlatest='cd $(ls -td */ | head -n 1)'
+alias python=python3
+
+# SLURM
+alias sq='squeue -u $USER'

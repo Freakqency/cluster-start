@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euox pipefail
+readonly name="${1:-rocm-systems}"
+
+pushd "$PWD"
+git clone --no-checkout --filter=blob:none https://github.com/ROCm/rocm-systems.git "$name"
+cd "$name"
+git sparse-checkout init --cone
+git sparse-checkout set projects/{rccl,rccl-tests}
+git checkout develop
+popd
