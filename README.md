@@ -1,4 +1,4 @@
-# dot-files
+# cluster-start
 
 Small, opinionated bootstrap repo for getting my development environment ready on a fresh Linux cluster.
 
